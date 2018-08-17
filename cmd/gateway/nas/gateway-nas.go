@@ -123,5 +123,5 @@ type nasObjects struct {
 
 // IsNotificationSupported returns whether notifications are applicable for this layer.
 func (l *nasObjects) IsNotificationSupported() bool {
-	return false
+	return true
 }
