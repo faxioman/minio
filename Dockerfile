@@ -17,8 +17,12 @@ RUN  \
      apk add --no-cache ca-certificates curl && \
      apk add --no-cache --virtual .build-deps git && \
      echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf && \
-     go get -v -d github.com/minio/minio && \
-     cd /go/src/github.com/minio/minio && \
+     cd $GOPATH && \
+     mkdir -p src/github.com/minio/ && \
+     cd src/github.com/minio/ && \
+     git clone --depth 1 --single-branch -b FIX.RELEASE.2018-08-02T23-11-36Z https://github.com/faxioman/minio.git && \
+     cd minio/ && \
+     go get -v -d ./... && \
      go install -v -ldflags "$(go run buildscripts/gen-ldflags.go)" && \
      rm -rf /go/pkg /go/src /usr/local/go && apk del .build-deps
 

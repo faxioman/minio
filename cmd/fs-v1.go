@@ -392,6 +392,11 @@ func (fs *FSObjects) DeleteBucket(ctx context.Context, bucket string) error {
 		return toObjectErr(err, bucket)
 	}
 
+	// Delete bucket upload temp folder
+	if err = fsRemoveAll(ctx, pathJoin(bucketDir, minioMetaBucket)); err != nil {
+		return toObjectErr(err, bucket)
+	}
+
 	// Attempt to delete regular bucket.
 	if err = fsRemoveDir(ctx, bucketDir); err != nil {
 		return toObjectErr(err, bucket)
@@ -854,7 +859,7 @@ func (fs *FSObjects) putObject(ctx context.Context, bucket string, object string
 	}
 
 	buf := make([]byte, int(bufSize))
-	fsTmpObjPath := pathJoin(fs.fsPath, minioMetaTmpBucket, fs.fsUUID, tempObj)
+	fsTmpObjPath := pathJoin(fs.fsPath, bucket, minioMetaTmpBucket, fs.fsUUID, tempObj)
 	bytesWritten, err := fsCreateFile(ctx, fsTmpObjPath, data, buf, data.Size())
 	if err != nil {
 		fsRemoveFile(ctx, fsTmpObjPath)

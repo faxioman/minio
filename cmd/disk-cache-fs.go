@@ -392,7 +392,7 @@ func (cfs *cacheFSObjects) PutObject(ctx context.Context, bucket string, object 
 	}
 
 	buf := make([]byte, int(bufSize))
-	fsTmpObjPath := pathJoin(fs.fsPath, minioMetaTmpBucket, fs.fsUUID, tempObj)
+	fsTmpObjPath := pathJoin(fs.fsPath, bucket, minioMetaTmpBucket, fs.fsUUID, tempObj)
 	bytesWritten, err := fsCreateFile(ctx, fsTmpObjPath, data, buf, data.Size())
 	if err != nil {
 		fsRemoveFile(ctx, fsTmpObjPath)

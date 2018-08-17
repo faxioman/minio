@@ -106,6 +106,14 @@ func filterListEntries(bucket, prefixDir string, entries []string, prefixEntry s
 	// Filter entries that have the prefix prefixEntry.
 	entries = filterMatchingPrefix(entries, prefixEntry)
 
+	//remove .minio.sys folder
+	for i, element := range entries {
+		if strings.HasPrefix(element, minioMetaBucket) {
+			entries = append(entries[:i], entries[i+1:]...)
+			break
+		}
+	}
+
 	// Can isLeaf() check be delayed till when it has to be sent down the
 	// treeWalkResult channel?
 	delayIsLeaf := delayIsLeafCheck(entries)
